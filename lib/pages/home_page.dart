@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-
+const APPBAR_SCROLL_OFFSET = 100;
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -12,8 +12,18 @@ class _HomePageState extends State<HomePage> {
     'https://hbimg.huabanimg.com/043f46e618db6167bab76d66526b4d1430eb970269e0a-3AooUa_fw658',
     'https://hbimg.huabanimg.com/acb67d0867fc191ac3a0e3a469151ba1948c31dc26788-J6L697_fw658',
   ];
+  double appBarAlpha = 0;
   _onScroll(offset) {
-    print(offset);
+    double alpha = offset / APPBAR_SCROLL_OFFSET;
+    if(alpha < 0) {
+      alpha = 0;
+    } else if(alpha > 1) {
+      alpha = 1;
+    }
+    setState(() {
+     appBarAlpha = alpha; 
+    });
+    print(appBarAlpha);
   }
   @override
   Widget build(BuildContext context) {
@@ -57,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Opacity(
-            opacity: 1,
+            opacity: appBarAlpha,
             child: Container(
               height: 80,
               decoration: BoxDecoration(
