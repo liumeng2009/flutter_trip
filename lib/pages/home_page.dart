@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_trip/dao/hom_dao.dart';
+import 'package:flutter_trip/model/home_model.dart';
 const APPBAR_SCROLL_OFFSET = 100;
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +16,14 @@ class _HomePageState extends State<HomePage> {
     'https://hbimg.huabanimg.com/acb67d0867fc191ac3a0e3a469151ba1948c31dc26788-J6L697_fw658',
   ];
   double appBarAlpha = 0;
+  String resultString = '';
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
   _onScroll(offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if(alpha < 0) {
@@ -25,6 +36,28 @@ class _HomePageState extends State<HomePage> {
     });
     print(appBarAlpha);
   }
+
+  loadData() async {
+    // HomeDao.fetch().then((result){
+    //   setState(() {
+    //    resultString = json.encode(result); 
+    //   });
+    // }).catchError((e){
+    //   resultString = e.toString();
+    // });
+    try {
+      HomeModel model = await HomeDao.fetch();
+      setState(() {
+        resultString = json.encode(model); 
+      });
+    } catch(e){
+      setState(() {
+        resultString = e.toString(); 
+      });
+    }
+
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     height: 800,
                     child: ListTile(
-                      title: Text('哈哈'),
+                      title: Text(resultString),
                     ),
                   ),
                 ],
