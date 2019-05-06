@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_trip/dao/hom_dao.dart';
 import 'package:flutter_trip/model/common_model.dart';
+import 'package:flutter_trip/model/grid_nav_model.dart';
 import 'package:flutter_trip/model/home_model.dart';
 import 'package:flutter_trip/widget/grid_nav.dart';
 import 'package:flutter_trip/widget/local_nav.dart';
@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   double appBarAlpha = 0;
   String resultString = '';
   List<CommonModel> localNavList = [];
+  GridNavModel gridNav;
 
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _HomePageState extends State<HomePage> {
       HomeModel model = await HomeDao.fetch();
       setState(() {
         localNavList = model.localNavList;
+        gridNav = model.gridNav;
       });
     } catch(e){
       setState(() {
@@ -100,10 +102,10 @@ class _HomePageState extends State<HomePage> {
                       localNavList: localNavList,
                     ),
                   ),
-                  Container(
-                    height: 800,
-                    child: ListTile(
-                      title: Text(''),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(7.0, 0.0, 7.0, 4.0),
+                    child: GridNav(
+                      gridNavModel: gridNav,
                     ),
                   ),
                 ],
