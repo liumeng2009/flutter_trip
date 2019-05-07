@@ -17,7 +17,6 @@ class LocalNav extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(7.0),
         child: _items(context),
-
       ),
     );
   }
