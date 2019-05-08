@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+  import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
-const CATCH_URLS = ['m.ctrip.com/', 'm.ctrip.com/html5/', 'm.ctrip.com/html5'];
+  const CATCH_URLS = ['m.ctrip.com/', 'm.ctrip.com/html5/', 'm.ctrip.com/html5'];
 
-class WebView extends StatefulWidget {
+  class WebView extends StatefulWidget {
   final String url;
   final String statusBarColor;
   final String title;
