@@ -43,7 +43,6 @@ class _SearchBarState extends State<SearchBar> {
         _controller.text = widget.defaultText;
       });
     }
-    _onChanged(widget.defaultText);
     super.initState();
   }
   @override
