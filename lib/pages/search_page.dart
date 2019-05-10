@@ -4,6 +4,22 @@ import 'package:flutter_trip/model/search_model.dart';
 import 'package:flutter_trip/widget/search_bar.dart';
 import 'package:flutter_trip/widget/webview.dart';
 
+const TYPES = [
+  'channelgroup', 
+  'gs',
+  'plane',
+  'train',
+  'cruise',
+  'district',
+  'food',
+  'hotel',
+  'huodong',
+  'shop',
+  'sight',
+  'ticket',
+  'travelgroup',
+  ];
+
 class SearchPage extends StatefulWidget {
   final bool hideLeft;
   final String keyword;
@@ -119,6 +135,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
               margin: EdgeInsets.all(1),
@@ -132,11 +149,12 @@ class _SearchPageState extends State<SearchPage> {
               children: <Widget>[
                 Container(
                   width: 300,
-                  child: Text('${item.word} ${item.districtname??''} ${item.zonename??''}'),
+                  child: _title(item),
                 ),
                 Container(
                   width: 300,
-                  child: Text('${item.price??''} ${item.type??''}'),
+                  margin: EdgeInsets.only(top: 5),
+                  child: _subTitle(item),
                 ),
               ],
             ),
@@ -147,6 +165,67 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _typeImage(String type) {
-    
+    if(type == null) return 'images/type_travelgroup.png';
+    String path = 'travelgroup';
+    for (final val in TYPES) {
+      if(type.contains(val)) {
+        path = val;
+        break;
+      }
+    }
+    return 'images/type_$path.png';
+  }
+
+  _title(SearchItemModel item) {
+    if(item ==null) return null;
+    List<TextSpan> spans = []; 
+    spans.addAll(_keywordTextSpans(item.word, searchModel.keyword));
+    spans.add(
+      TextSpan(
+        text: '' + (item.districtname ?? '') + '' + (item.zonename ?? ''),
+        style: TextStyle(fontSize: 16, color: Colors.grey),
+      ),
+    );
+    return RichText(
+      text: TextSpan(
+        children: spans,
+      ),
+    );
+  }
+
+  _keywordTextSpans(String word, String wordkey) {
+    List<TextSpan> spans = [];
+    if(word == null || word.length ==0) return spans;
+    List<String> arr = word.split(wordkey);
+    TextStyle normalStyle = TextStyle(fontSize: 16, color: Colors.black87);
+    TextStyle keywordStyle = TextStyle(fontSize: 16, color: Colors.orange);
+
+    for(int i = 0 ; i < arr.length ; i++) {
+      if( i + 1 % 2 == 0) {
+        spans.add(TextSpan(text: keyword, style: keywordStyle));
+      }
+      String val = arr[i];
+      if(val != null && val.length > 0) {
+        spans.add(TextSpan(text: val, style: normalStyle));
+      }
+    }
+    return spans;
+  }
+
+  _subTitle(SearchItemModel item) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: item.price ?? '',
+            style: TextStyle(fontSize: 16, color: Colors.orange),
+          ),
+          TextSpan(
+            text: ' ' + (item.price ?? ''),
+            style: TextStyle(fontSize: 12, color: Colors.grey),
+          ),
+        ]
+      ),
+    );
   }
 }
