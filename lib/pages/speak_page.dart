@@ -51,13 +51,11 @@ class _SpeakPageState extends State<SpeakPage> with TickerProviderStateMixin {
   }
 
   _speakStart() {
-
+    controller.forward();
   }
   _speakStop() {
-  
-  }
-  _speakCancel() {
-    
+    controller.reset();
+    controller.stop();
   }
   _topItem() {
     return Column(
