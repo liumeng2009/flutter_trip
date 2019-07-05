@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_trip/pages/search_page.dart';
+import 'package:flutter_trip/plugin/asr_manager.dart';
+import 'package:flutter_trip/util/navigator_util.dart';
 
 const MIC_SIZE = 80.0;
-const SPEAK_TIP = "按住说话";
 class SpeakPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SpeakPageState();
 }
 
 class _SpeakPageState extends State<SpeakPage> with TickerProviderStateMixin {
+  String speakTips = "按住说话";
   String speakResult = '';
   Animation<double> animation;
   AnimationController controller;
 
   @override
   void initState() {
-    controller = AnimationController(vsync: this, duration: Duration(microseconds: 1000));
+    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
     animation = CurvedAnimation(parent: controller, curve: Curves.easeIn)
       ..addStatusListener((status) {
         if(status == AnimationStatus.completed) {
@@ -52,10 +55,37 @@ class _SpeakPageState extends State<SpeakPage> with TickerProviderStateMixin {
 
   _speakStart() {
     controller.forward();
+    setState(() {
+     speakResult = '-识别中-'; 
+    });
+    AsrManager.start().then((text) {
+      if(text != null && text.length > 0) {
+        setState(() {
+          speakResult = text;
+        });
+        Navigator.pop(context);
+        NavigatorUtil.push(
+          context,
+          SearchPage(
+            keyword: speakResult,
+          )
+        );
+        print(speakResult);
+      }
+    }).catchError((e) {
+      setState(() {
+      speakTips = '长按说话'; 
+      });
+      print(e);
+    });
   }
   _speakStop() {
+    setState(() {
+     speakTips = '长按说话'; 
+    });
     controller.reset();
     controller.stop();
+    AsrManager.stop();
   }
   _topItem() {
     return Column(
@@ -108,7 +138,7 @@ class _SpeakPageState extends State<SpeakPage> with TickerProviderStateMixin {
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
-                      SPEAK_TIP,
+                      speakTips,
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 12,
@@ -122,7 +152,9 @@ class _SpeakPageState extends State<SpeakPage> with TickerProviderStateMixin {
                         width: MIC_SIZE,
                       ),
                       Center(
-                        child: AnimatedMic(),
+                        child: AnimatedMic(
+                          animation: animation,
+                        ),
                       ),
                     ],
                   ),

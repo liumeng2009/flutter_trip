@@ -90,15 +90,6 @@ class _WebViewState extends State<WebView> {
               url: widget.url,
               withZoom: true,
               withLocalStorage: true,
-              hidden: true,
-              initialChild: Container(
-                color: Colors.white,
-                child: Center(
-                  child: Text(
-                    'Waiting',
-                  ),
-                ),
-              ),
             ),
           ),
         ],

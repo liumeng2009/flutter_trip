@@ -78,6 +78,13 @@ class _SearchPageState extends State<SearchPage> {
 
   }
 
+  void initState(){
+    if(widget.keyword != null && widget.keyword.length > 0) {
+      _onTextChanged(widget.keyword);
+    }
+    super.initState();
+  }
+
   _appBar() {
     return Column(
       children: <Widget>[
